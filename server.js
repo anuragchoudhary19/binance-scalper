@@ -14,14 +14,12 @@ setIntervalAsync(async () => {
 }, 250);
 
 app.post('/api/long/:coin', (req, res) => {
-  console.log(req.params);
-  return res.send('OK');
-  // placeLongFuturesOrder(req.body.symbol);
+  console.log('LONG', req.params.coin);
+  placeLongFuturesOrder(req, res, req.params.coin);
 });
 app.post('/api/short/:coin', (req, res) => {
-  console.log(req.params);
-  return res.send('OK');
-  // placeShortFuturesOrder(req.body.symbol);
+  console.log('SHORT', req.params.coin);
+  placeShortFuturesOrder(req, res, req.params.coin);
 });
 const port = process.env.PORT || 8001;
 app.listen(port, () => {

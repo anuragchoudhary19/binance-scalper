@@ -24,7 +24,7 @@ exports.futuresMarketBuy = async (symbol, quantity) => {
 exports.futuresMarketSell = async (symbol, quantity) => {
   console.info(await binance.futuresMarketSell(`${symbol}USDT`, quantity));
 };
-exports.placeLongFuturesOrder = async (symbol = 'GALA') => {
+exports.placeLongFuturesOrder = async (req, res, symbol) => {
   try {
     let account = await binance.futuresAccount();
     if (account) {
@@ -32,14 +32,16 @@ exports.placeLongFuturesOrder = async (symbol = 'GALA') => {
       const coinPrice = await binance.futuresMarkPrice(`${symbol}USDT`);
       let quantity = Math.floor((availableBalance / coinPrice.markPrice) * 0.5);
       console.log(quantity);
-      if (quantity === 0) return;
-      futuresMarketBuy(symbol, quantity);
+      if (quantity === 0) return res.send('ok');
+      // futuresMarketBuy(symbol, quantity);
+      return res.send('ok');
     }
   } catch (e) {
     console.log(e);
+    res.send('err');
   }
 };
-exports.placeShortFuturesOrder = async (symbol = 'GALA') => {
+exports.placeShortFuturesOrder = async (req, res, symbol) => {
   try {
     let account = await binance.futuresAccount();
     if (account) {
@@ -47,10 +49,12 @@ exports.placeShortFuturesOrder = async (symbol = 'GALA') => {
       const coinPrice = await binance.futuresMarkPrice(`${symbol}USDT`);
       let quantity = Math.floor((availableBalance / coinPrice.markPrice) * 0.5);
       console.log(quantity);
-      if (quantity === 0) return;
-      futuresMarketSell(symbol, quantity);
+      if (quantity === 0) return res.send('ok');
+      // futuresMarketSell(symbol, quantity);
+      return res.send('ok');
     }
   } catch (e) {
     console.log(e);
+    res.send('err');
   }
 };

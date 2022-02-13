@@ -13,13 +13,13 @@ setIntervalAsync(async () => {
   await getUnrealizedProfitCoins();
 }, 250);
 
-app.post('/api/long', (req, res) => {
-  console.log(req.body);
+app.post('/api/long/:coin', (req, res) => {
+  console.log(req.params);
   return res.send('OK');
   // placeLongFuturesOrder(req.body.symbol);
 });
-app.post('/api/short', (req, res) => {
-  console.log(req.body);
+app.post('/api/short/:coin', (req, res) => {
+  console.log(req.params);
   return res.send('OK');
   // placeShortFuturesOrder(req.body.symbol);
 });

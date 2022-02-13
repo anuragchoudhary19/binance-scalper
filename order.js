@@ -7,12 +7,12 @@ var binance = new Binance().options({
 });
 
 exports.bookProfit = async (coin) => {
-  const { symbol, positionSide, positionAmt } = coin;
+  const { symbol, positionSide } = coin;
   if (positionSide === 'LONG') {
-    console.log(await binance.futuresMarketSell(symbol, positionAmt, { positionSide: 'SHORT' }));
+    console.log(await binance.futuresMarketSell(symbol, { closePosition: true }));
   }
   if (positionSide === 'SHORT') {
-    console.log(await binance.futuresMarketBuy(symbol, positionAmt, { positionSide: 'LONG' }));
+    console.log(await binance.futuresMarketBuy(symbol, { closePosition: true }));
   }
 };
 

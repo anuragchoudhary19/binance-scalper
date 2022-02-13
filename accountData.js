@@ -19,12 +19,12 @@ exports.getUnrealizedProfitCoins = async () => {
         // console.log(coins);
         let percentageProfit = (coins[0].unrealizedProfit / coins[0].isolatedWallet) * 100;
         // console.log(Math.floor(percentageProfit));
-        if (percentageProfit >= 2) {
+        if (percentageProfit >= 20) {
           bookProfit(coins[0]);
         }
-        if (percentageProfit <= -2) {
-          bookProfit(coins[0]);
-        }
+        // if (percentageProfit <= -2) {
+        //   bookProfit(coins[0]);
+        // }
       }
     }
   } catch (e) {

@@ -13,14 +13,15 @@ exports.getUnrealizedProfitCoins = async () => {
     if (account) {
       let positions = account.positions;
       let coins = positions.filter((coin) => coin.unrealizedProfit < 0 || coin.unrealizedProfit > 0);
-      if (coins.length > 0) {
+      if (coins.length === 0) return;
+      for (let i = 0; i < coins.length; i++) {
         // console.log(coins);
         let percentageProfit = (coins[0].unrealizedProfit / coins[0].isolatedWallet) * 100;
         // console.log(Math.floor(percentageProfit));
-        if (percentageProfit >= 0.5) {
+        if (percentageProfit >= 1) {
           bookProfit(coins[0]);
         }
-        if (percentageProfit <= -0.5) {
+        if (percentageProfit <= -1) {
           bookProfit(coins[0]);
         }
       }

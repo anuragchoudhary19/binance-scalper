@@ -16,22 +16,20 @@ exports.bookProfit = async (coin) => {
   }
 };
 
-exports.futuresMarketBuy = async (symbol, quantity) => {
-  console.info(await binance.futuresMarketBuy(`${symbol}USDT`, quantity));
-};
-exports.futuresMarketSell = async (symbol, quantity) => {
-  console.info(await binance.futuresMarketSell(`${symbol}USDT`, quantity));
-};
 exports.placeLongFuturesOrder = async (req, res, symbol) => {
   try {
     let account = await binance.futuresAccount();
     if (account) {
+      let positions = account.positions;
+      let coin = positions.filter((coin) => coin.symbol === `${symbol}USDT` && coin.positionSide === 'LONG');
+      let tradeAlreadyExist = coin.positionAmt > 0 ? true : false;
+      if (tradeAlreadyExist) return res.send('ok');
       let availableBalance = account.availableBalance;
       const coinPrice = await binance.futuresMarkPrice(`${symbol}USDT`);
       let quantity = Math.floor((availableBalance / coinPrice.markPrice) * 0.5);
       console.log(quantity);
       if (quantity === 0) return res.send('ok');
-      futuresMarketBuy(symbol, quantity);
+      console.info(await binance.futuresMarketBuy(`${symbol}USDT`, quantity));
       return res.send('ok');
     }
   } catch (e) {
@@ -43,12 +41,16 @@ exports.placeShortFuturesOrder = async (req, res, symbol) => {
   try {
     let account = await binance.futuresAccount();
     if (account) {
+      let positions = account.positions;
+      let coin = positions.filter((coin) => coin.symbol === `${symbol}USDT` && coin.positionSide === 'SHORT');
+      let tradeAlreadyExist = coin.positionAmt > 0 ? true : false;
+      if (tradeAlreadyExist) return res.send('ok');
       let availableBalance = account.availableBalance;
       const coinPrice = await binance.futuresMarkPrice(`${symbol}USDT`);
       let quantity = Math.floor((availableBalance / coinPrice.markPrice) * 0.5);
       console.log(quantity);
       if (quantity === 0) return res.send('ok');
-      futuresMarketSell(symbol, quantity);
+      console.info(await binance.futuresMarketSell(`${symbol}USDT`, quantity));
       return res.send('ok');
     }
   } catch (e) {

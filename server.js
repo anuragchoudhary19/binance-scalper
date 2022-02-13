@@ -14,11 +14,11 @@ setIntervalAsync(async () => {
 }, 250);
 
 app.post('/api/long', (req, res) => {
-  console.log(req.body.symbol);
+  console.log(req);
   // placeLongFuturesOrder(req.body.symbol);
 });
 app.post('/api/short', (req, res) => {
-  console.log(req.body.symbol);
+  console.log(req);
   // placeShortFuturesOrder(req.body.symbol);
 });
 const port = process.env.PORT || 8001;

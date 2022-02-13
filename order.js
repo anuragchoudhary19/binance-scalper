@@ -9,10 +9,10 @@ var binance = new Binance().options({
 exports.bookProfit = async (coin) => {
   const { symbol, positionSide, positionAmt } = coin;
   if (positionSide === 'LONG') {
-    console.log(await binance.futuresMarketSell(symbol, positionAmt, { reduceOnly: true }));
+    console.log(await binance.futuresMarketSell(symbol, positionAmt, { positionSide: 'SHORT', reduceOnly: true }));
   }
   if (positionSide === 'SHORT') {
-    console.log(await binance.futuresMarketBuy(symbol, positionAmt, { reduceOnly: true }));
+    console.log(await binance.futuresMarketBuy(symbol, positionAmt, { positionSide: 'LONG', reduceOnly: true }));
   }
 };
 
@@ -29,7 +29,7 @@ exports.placeLongFuturesOrder = async (req, res, symbol) => {
       let quantity = Math.floor((availableBalance / coinPrice.markPrice) * 0.5);
       console.log(quantity);
       if (quantity === 0) return res.send('ok');
-      console.info(await binance.futuresMarketBuy(`${symbol}USDT`, quantity));
+      console.info(await binance.futuresMarketBuy(`${symbol}USDT`, quantity, { positionSide: 'LONG' }));
       return res.send('ok');
     }
   } catch (e) {
@@ -50,7 +50,7 @@ exports.placeShortFuturesOrder = async (req, res, symbol) => {
       let quantity = Math.floor((availableBalance / coinPrice.markPrice) * 0.5);
       console.log(quantity);
       if (quantity === 0) return res.send('ok');
-      console.info(await binance.futuresMarketSell(`${symbol}USDT`, quantity));
+      console.info(await binance.futuresMarketSell(`${symbol}USDT`, quantity, { positionSide: 'SHORT' }));
       return res.send('ok');
     }
   } catch (e) {

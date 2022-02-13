@@ -2,6 +2,7 @@ const Binance = require('node-binance-api');
 var binance = new Binance().options({
   APIKEY: process.env.API_KEY,
   APISECRET: process.env.SECRET_KEY,
+  hedgeMode: true,
   useServerTime: true,
   recvWindow: 60000,
 });

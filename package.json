@@ -8,6 +8,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@mathieuc/tradingview": "^3.2.0",
     "axios": "^0.21.1",
     "binance": "^1.4.0",
     "cors": "^2.8.5",

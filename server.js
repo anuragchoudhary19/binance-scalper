@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const Binance = require('node-binance-api');
 const { setIntervalAsync } = require('set-interval-async/dynamic');
 const { clearIntervalAsync } = require('set-interval-async');
 const { getUnrealizedProfitCoins } = require('./accountData');
@@ -8,11 +9,16 @@ const { placeShortFuturesOrder, placeLongFuturesOrder } = require('./order');
 const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
-
-setIntervalAsync(async () => {
-  await getUnrealizedProfitCoins();
-}, 250);
-
+var binance = new Binance().options({
+  APIKEY: process.env.API_KEY,
+  APISECRET: process.env.SECRET_KEY,
+  hedgeMode: true,
+  useServerTime: true,
+  recvWindow: 60000,
+});
+// setIntervalAsync(async () => {
+//   await getUnrealizedProfitCoins();
+// }, 250);
 app.post('/api/long/:coin', (req, res) => {
   console.log('LONG', req.params.coin);
   placeLongFuturesOrder(req, res, req.params.coin);

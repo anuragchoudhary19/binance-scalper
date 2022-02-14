@@ -10,16 +10,17 @@ var binance = new Binance().options({
 });
 exports.getUnrealizedProfitCoins = async () => {
   try {
-    let account = await binance.futuresAccount();
-    if (account) {
-      let positions = account.positions;
-      let coins = positions.filter((coin) => coin.unrealizedProfit < 0 || coin.unrealizedProfit > 0);
+    let positions = await binance.futuresPositionRisk();
+    if (positions.length) {
+      // let coin = positions.filter((coin) => coin.symbol === 'GALAUSDT');
+      // console.log(coin);
+      let coins = positions.filter((coin) => coin.unRealizedProfit < 0 || coin.unRealizedProfit > 0);
       if (coins.length === 0) return;
       for (let i = 0; i < coins.length; i++) {
         // console.log(coins);
         let percentageProfit = (coins[0].unrealizedProfit / coins[0].isolatedWallet) * 100;
         // console.log(Math.floor(percentageProfit));
-        if (percentageProfit >= 20) {
+        if (percentageProfit >= 5) {
           bookProfit(coins[0]);
         }
         // if (percentageProfit <= -2) {

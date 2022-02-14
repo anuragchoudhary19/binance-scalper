@@ -30,7 +30,7 @@ exports.placeLongFuturesOrder = async (req, res, symbol) => {
     if (account) {
       let positions = account.positions;
       let coin = positions.filter((coin) => coin.symbol === `${symbol}USDT` && coin.positionSide === 'LONG');
-      let tradeAlreadyExist = coin.positionAmt > 0 ? true : false;
+      let tradeAlreadyExist = parseInt(coin.positionAmt) > 0 ? true : false;
       if (tradeAlreadyExist) return res.send('ok');
       let availableBalance = account.availableBalance;
       const coinPrice = await binance.futuresMarkPrice(coin.symbol);
@@ -50,11 +50,11 @@ exports.placeShortFuturesOrder = async (req, res, symbol) => {
     if (account) {
       let positions = account.positions;
       let coin = positions.filter((coin) => coin.symbol === `${symbol}USDT` && coin.positionSide === 'SHORT');
-      let tradeAlreadyExist = coin.positionAmt > 0 ? true : false;
+      let tradeAlreadyExist = parseInt(coin.positionAmt) > 0 ? true : false;
       if (tradeAlreadyExist) return res.send('ok');
       let availableBalance = account.availableBalance;
       const coinPrice = await binance.futuresMarkPrice(`${symbol}USDT`);
-      let quantity = Math.floor((availableBalance / coinPrice.markPrice) * 0.9 * 5);
+      let quantity = Math.floor((availableBalance / coinPrice.markPrice) * 0.9 * parseInt(coin.leverage));
       console.log(quantity);
       if (quantity === 0) return res.send('ok');
       console.info(await binance.futuresMarketSell(`${symbol}USDT`, quantity, { positionSide: 'SHORT' }));
